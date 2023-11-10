@@ -97,6 +97,23 @@ public class DoublyLinkedList implements Serializable {
     public void showToast(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
+    public void deleteNode(String value) {
+        Node currentNode = head;
+        while (currentNode != null) {
+            if (currentNode.data.equals(value)) {
+                if (currentNode.prev != null) {
+                    currentNode.prev.next = currentNode.next;
+                } else {
+                    head = currentNode.next;
+                }
+                if (currentNode.next != null) {
+                    currentNode.next.prev = currentNode.prev;
+                }
+                break;
+            }
+            currentNode = currentNode.next;
+        }
+    }
 
     public void sort() {
         // Преобразование узлов в список

@@ -1,5 +1,4 @@
 package com.example.kusrovoi;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,9 +7,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 public class ListOperationsActivity extends AppCompatActivity {
-
     private TextView listTextView;
     private EditText dataEditText;
     private Button sortButton;
@@ -18,12 +15,10 @@ public class ListOperationsActivity extends AppCompatActivity {
     private Button deleteNodeButton;
     private DoublyLinkedList list;
     private EditText numberEditText;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_operations);
-
         listTextView = findViewById(R.id.listTextView);
         dataEditText = findViewById(R.id.dataEditText);
         sortButton = findViewById(R.id.sortButton);
@@ -32,13 +27,8 @@ public class ListOperationsActivity extends AppCompatActivity {
         Button insertBeforeButton = findViewById(R.id.addNodeStartButton);
         Button insertAfterButton = findViewById(R.id.addNodeEndButton);
         numberEditText = findViewById(R.id.numberEditText);
-
-        // Get the DoublyLinkedList object from the previous activity
         list = (DoublyLinkedList) getIntent().getSerializableExtra("doublyLinkedList");
-
-        // Display the current state of the list
         displayList();
-
         sortButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,58 +36,66 @@ public class ListOperationsActivity extends AppCompatActivity {
                 displayList();
             }
         });
-
         insertBeforeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String inputIndex = numberEditText.getText().toString().trim();
+                String inpudData = dataEditText.getText().toString().trim();
+                if (inputIndex.isEmpty() && inpudData.isEmpty()){
+                    Toast.makeText(ListOperationsActivity.this, "Указатель или число не обнаружены", Toast.LENGTH_SHORT).show();
+                } else {
                 String data = dataEditText.getText().toString();
                 String number = numberEditText.getText().toString();
                 list.insertBefore(data, number);
                 displayList();
                 dataEditText.setText("");
                 numberEditText.setText("");
-            }
+            }}
         });
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String data = dataEditText.getText().toString();
-                list.append(data);
-                displayList();
-                dataEditText.setText("");
-                numberEditText.setText("");
+                String inputData = dataEditText.getText().toString().trim();
+                if (!inputData.isEmpty()) {
+                    String cleanData = inputData.replaceAll("\\s+", "");
+                    list.append(" " + cleanData);
+                    displayList();
+                    dataEditText.setText("");
+                    numberEditText.setText("");
+                } else {
+                    Toast.makeText(ListOperationsActivity.this, "Число не обнаружено", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-        // Добавленный код для кнопки "Назад"
-        Button backButton = findViewById(R.id.backButton);
 
+        Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Вызываем метод finish() для завершения текущей активности
                 finish();
             }
         });
-
-
         insertAfterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String inputIndex = numberEditText.getText().toString().trim();
+                String inpudData = dataEditText.getText().toString().trim();
+                if (inputIndex.isEmpty() && inpudData.isEmpty()){
+                    Toast.makeText(ListOperationsActivity.this, "Указатель или число не обнаружены", Toast.LENGTH_SHORT).show();
+                } else {
                 String data = dataEditText.getText().toString();
                 String number = numberEditText.getText().toString();
                 list.insertAfter(data, number);
                 displayList();
                 numberEditText.setText("");
                 dataEditText.setText("");
-            }
+            }}
         });
-
         deleteNodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String input = numberEditText.getText().toString().trim();
-
                 if (!input.isEmpty()) {
                     String[] numbers = input.split("\\s+");
 
@@ -112,34 +110,29 @@ public class ListOperationsActivity extends AppCompatActivity {
                             numberEditText.setText("");
                             dataEditText.setText("");
                         } catch (NumberFormatException e) {
-                            // Используем метод showToast из DoublyLinkedList
-                            list.showToast("Неверный ввод. Введите действительные числа, разделенные пробелами.");
+                            Toast.makeText(ListOperationsActivity.this, "Неверный ввод. Введите три действительных числа, разделенные пробелами.", Toast.LENGTH_SHORT).show();
                         }
-                    } else {
-                        // Используем метод showToast из DoublyLinkedList
-                        list.showToast("Пожалуйста, введите три числа, разделенные пробелами.");
+                    }
+                    else if (numbers.length == 1) {
+                        try {
+                            int currentNode = Integer.parseInt(numbers[0]);
+                            list.deleteNode(String.valueOf(currentNode));
+                            displayList();
+                            numberEditText.setText("");
+                            dataEditText.setText("");
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(ListOperationsActivity.this, "Неверный ввод. Введите действительное число.", Toast.LENGTH_SHORT).show();
+                        }}
+
+                    else {
+                        Toast.makeText(ListOperationsActivity.this, "Неверный ввод. Введите три действительных числа, разделенные пробелами.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    // Используем метод showToast из DoublyLinkedList
-                    list.showToast("Пожалуйста, введите три числа, разделенные пробелами.");
+                    Toast.makeText(ListOperationsActivity.this, "Число не обнаружено", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-
-
-        addItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String data = dataEditText.getText().toString();
-                list.append(data);
-                displayList();
-                dataEditText.setText("");
-                numberEditText.setText("");
-            }
-        });
     }
-
     private void displayList() {
         StringBuilder stringBuilder = new StringBuilder();
         Node current = list.head;
@@ -148,9 +141,5 @@ public class ListOperationsActivity extends AppCompatActivity {
             current = current.next;
         }
         listTextView.setText(stringBuilder.toString());
-    }
-
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
