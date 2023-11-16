@@ -81,22 +81,75 @@ public class DoublyLinkedList implements Serializable {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
     public void deleteNode(String value) {
-        Node currentNode = head;
-        while (currentNode != null) {
-            if (currentNode.data.equals(value)) {
-                if (currentNode.prev != null) {
-                    currentNode.prev.next = currentNode.next;
-                } else {
-                    head = currentNode.next;
+        String[] numbers = value.split("\\s+");
+
+        if (numbers.length == 2) {
+            // Удаление элемента по указанной голове
+            try {
+                int headValue = Integer.parseInt(numbers[0]);
+                int currentNodeValue = Integer.parseInt(numbers[1]);
+
+                Node currentNode = head;
+                boolean nodeFound = false;
+
+                while (currentNode != null) {
+                    if (currentNode.data.equals(String.valueOf(currentNodeValue)) &&
+                            (currentNode.prev != null && currentNode.prev.data.equals(String.valueOf(headValue)))) {
+                        nodeFound = true;
+                        if (currentNode.prev != null) {
+                            currentNode.prev.next = currentNode.next;
+                        } else {
+                            head = currentNode.next;
+                        }
+                        if (currentNode.next != null) {
+                            currentNode.next.prev = currentNode.prev;
+                        }
+                        break;
+                    }
+                    currentNode = currentNode.next;
                 }
-                if (currentNode.next != null) {
-                    currentNode.next.prev = currentNode.prev;
+
+                if (!nodeFound) {
+                    showToast("Не удалось найти узел с указанными числами");
                 }
-                break;
+            } catch (NumberFormatException e) {
+                showToast("Неверный ввод. Введите действительные числа.");
             }
-            currentNode = currentNode.next;
+        } else if (numbers.length == 1) {
+            // Удаление элемента по значению
+            try {
+                int currentNodeValue = Integer.parseInt(numbers[0]);
+
+                Node currentNode = head;
+                boolean nodeFound = false;
+
+                while (currentNode != null) {
+                    if (currentNode.data.equals(String.valueOf(currentNodeValue))) {
+                        nodeFound = true;
+                        if (currentNode.prev != null) {
+                            currentNode.prev.next = currentNode.next;
+                        } else {
+                            head = currentNode.next;
+                        }
+                        if (currentNode.next != null) {
+                            currentNode.next.prev = currentNode.prev;
+                        }
+                        break;
+                    }
+                    currentNode = currentNode.next;
+                }
+
+                if (!nodeFound) {
+                    showToast("Не удалось найти узел с числом " + currentNodeValue);
+                }
+            } catch (NumberFormatException e) {
+                showToast("Неверный ввод. Введите действительное число.");
+            }
+        } else {
+            showToast("Неверный ввод. Введите одно или два действительных числа, разделенных пробелами.");
         }
     }
+
     public void sort() {
         List<Integer> nodeList = new ArrayList<>();
         Node current = head;

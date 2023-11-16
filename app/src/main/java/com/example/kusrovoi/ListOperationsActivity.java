@@ -94,37 +94,12 @@ public class ListOperationsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String input = numberEditText.getText().toString().trim();
+
                 if (!input.isEmpty()) {
-                    String[] numbers = input.split("\\s+");
-
-                    if (numbers.length == 3) {
-                        try {
-                            int prevNode = Integer.parseInt(numbers[0]);
-                            int currentNode = Integer.parseInt(numbers[1]);
-                            int nextNode = Integer.parseInt(numbers[2]);
-
-                            list.deleteMiddleNode(String.valueOf(prevNode), String.valueOf(currentNode), String.valueOf(nextNode));
-                            displayList();
-                            numberEditText.setText("");
-                            dataEditText.setText("");
-                        } catch (NumberFormatException e) {
-                            Toast.makeText(ListOperationsActivity.this, "Неверный ввод. Введите три действительных числа, разделенные пробелами.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    else if (numbers.length == 1) {
-                        try {
-                            int currentNode = Integer.parseInt(numbers[0]);
-                            list.deleteNode(String.valueOf(currentNode));
-                            displayList();
-                            numberEditText.setText("");
-                            dataEditText.setText("");
-                        } catch (NumberFormatException e) {
-                            Toast.makeText(ListOperationsActivity.this, "Неверный ввод. Введите действительное число.", Toast.LENGTH_SHORT).show();
-                        }}
-
-                    else {
-                        Toast.makeText(ListOperationsActivity.this, "Неверный ввод. Введите три действительных числа, разделенные пробелами.", Toast.LENGTH_SHORT).show();
-                    }
+                    list.deleteNode(input);
+                    displayList();
+                    numberEditText.setText("");
+                    dataEditText.setText("");
                 } else {
                     Toast.makeText(ListOperationsActivity.this, "Число не обнаружено", Toast.LENGTH_SHORT).show();
                 }
