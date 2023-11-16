@@ -58,7 +58,7 @@ public class ListOperationsActivity extends AppCompatActivity {
                 String inputData = dataEditText.getText().toString().trim();
                 if (!inputData.isEmpty()) {
                     String cleanData = inputData.replaceAll("\\s+", "");
-                    list.append(" " + cleanData);
+                    list.append("" + cleanData);
                     displayList();
                     dataEditText.setText("");
                     numberEditText.setText("");
@@ -67,8 +67,6 @@ public class ListOperationsActivity extends AppCompatActivity {
                 }
             }
         });
-
-
         Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override

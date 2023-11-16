@@ -1,7 +1,5 @@
 package com.example.kusrovoi;
-
 import java.io.Serializable;
-
 class Node implements Serializable {
     public String data;
     public Node next;
